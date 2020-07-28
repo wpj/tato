@@ -1,0 +1,24 @@
+overwrite: true
+
+config:
+  namingConvention:
+    enumValues: keep
+
+schema: http://localhost:8000/___graphql
+
+documents:
+  - ./packages/gatsby-theme-tato/src/**/*.tsx
+  - ./node_modules/gatsby*/!(node_modules)/**/*.js
+
+generates:
+  packages/gatsby-theme-tato/src/graphql/types.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+
+pluckConfig:
+  modules:
+    - name: gatsby
+      identifier: graphql
+  globalGqlIdentifierName:
+    - graphql

@@ -1,0 +1,75 @@
+{
+  "name": "gatsby-theme-tato",
+  "description": "Gatsby theme for browsing markdown recipes",
+  "version": "0.0.0",
+  "license": "MIT",
+  "main": "index.js",
+  "author": "Wyatt Johnston <w@wyatt.page>",
+  "homepage": "https://github.com/wpj/gatsby-theme-tato#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wpj/gatsby-theme-tato"
+  },
+  "keywords": [
+    "gatsby",
+    "theme"
+  ],
+  "files": [
+    "content",
+    "index.js",
+    "gatsby-*.js",
+    "lib",
+    "src",
+    "static"
+  ],
+  "scripts": {
+    "prepublishOnly": "tsc"
+  },
+  "dependencies": {
+    "change-case": "^4.1.1",
+    "classcat": "^4.1.0",
+    "csstype": "^2.6.11",
+    "fs-extra": "^9.0.1",
+    "gatsby-image": "^2.4.9",
+    "gatsby-plugin-manifest": "^2.4.14",
+    "gatsby-plugin-netlify-cms": "^4.3.11",
+    "gatsby-plugin-offline": "^3.2.13",
+    "gatsby-plugin-react-helmet": "^3.3.6",
+    "gatsby-plugin-sharp": "^2.6.14",
+    "gatsby-plugin-treat": "^1.4.2",
+    "gatsby-plugin-typescript": "^2.4.14",
+    "gatsby-remark-copy-linked-files": "^2.3.7",
+    "gatsby-remark-images": "^3.3.14",
+    "gatsby-remark-responsive-iframe": "^2.4.7",
+    "gatsby-remark-smartypants": "^2.3.6",
+    "gatsby-source-filesystem": "^2.3.14",
+    "gatsby-transformer-remark": "^2.8.20",
+    "gatsby-transformer-sharp": "^2.5.7",
+    "js-search": "^2.0.0",
+    "lodash": "^4.17.19",
+    "netlify-cms-app": "^2.12.16",
+    "polished": "^3.6.5",
+    "query-string": "^6.13.1",
+    "react-feather": "^2.0.8",
+    "react-helmet": "^6.1.0",
+    "react-treat": "^1.4.3",
+    "treat": "^1.4.3",
+    "typeface-work-sans": "^0.0.72",
+    "typography": "^0.16.19"
+  },
+  "devDependencies": {
+    "gatsby": "^2.24.2",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  },
+  "peerDependencies": {
+    "gatsby": "^2.24.2",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  },
+  "engines": {
+    "node": ">=10.13.0",
+    "npm": ">=6",
+    "yarn": ">=1"
+  }
+}
