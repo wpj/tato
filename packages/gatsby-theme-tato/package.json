@@ -1,7 +1,7 @@
 {
   "name": "gatsby-theme-tato",
   "description": "Gatsby theme for browsing markdown recipes",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "license": "MIT",
   "main": "index.js",
   "author": "Wyatt Johnston <w@wyatt.page>",
