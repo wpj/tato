@@ -2,7 +2,7 @@
   "private": true,
   "workspaces": [
     "packages/demo",
-    "packages/gatsby-theme-tato"
+    "packages/tato"
   ],
   "scripts": {
     "graphql-type-gen": "graphql-codegen --config graphql-codegen.yml",
