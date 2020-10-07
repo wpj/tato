@@ -22,6 +22,7 @@
     "target": "esnext"
   },
   "include": ["src"],
+  "exclude": ["node_modules"],
   "ts-node": {
     "compilerOptions": {
       "module": "commonjs"

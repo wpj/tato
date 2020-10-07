@@ -30,17 +30,16 @@ export const Recipe: FC<Recipe> = ({ content, title }) => {
   );
 };
 
-interface RecipeTemplateProps {
+type RecipeTemplateProps = {
   siteTitle: string;
-  recipe: Recipe;
-}
+} & Recipe;
 
-const RecipeTemplate = ({ siteTitle, recipe }: RecipeTemplateProps) => {
-  const pageTitle = `${siteTitle} | Recipe - ${recipe.title}`;
+const RecipeTemplate = ({ siteTitle, title, content }: RecipeTemplateProps) => {
+  const pageTitle = `${siteTitle} | Recipe - ${title}`;
 
   return (
     <MainLayout pageTitle={pageTitle} siteTitle={siteTitle}>
-      <Recipe title={recipe.title} content={recipe.content} />
+      <Recipe title={title} content={content} />
     </MainLayout>
   );
 };

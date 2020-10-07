@@ -71,4 +71,5 @@ yarn-error.log
 # Local Netlify folder
 .netlify
 
-packages/gatsby-theme-tato/static/admin/config.yml
+dist
+.julienne
