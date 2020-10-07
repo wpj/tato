@@ -9,6 +9,9 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
 const templates = {
   index: require.resolve('./pages/index.tsx'),
+  recipe_index: require.resolve('./pages/recipes.tsx'),
+  settings: require.resolve('./pages/settings.tsx'),
+  tag_index: require.resolve('./pages/tags.tsx'),
   // recipe: require.resolve('./templates/recipe/index.tsx'),
   // tag: require.resolve('./templates/tag/index.tsx'),
 };
@@ -26,6 +29,26 @@ function getStore(): Store<Templates> {
       title: 'Tato',
     },
   }));
+
+  store.createPage('/recipes/', async () => {
+    return {
+      template: 'recipe_index',
+      props: {
+        recipes: [],
+        siteTitle: 'Tato',
+      },
+    };
+  });
+
+  store.createPage('/tags/', async () => {
+    return {
+      template: 'tag_index',
+      props: {
+        tags: [],
+        siteTitle: 'Tato',
+      },
+    };
+  });
 
   return store;
 }

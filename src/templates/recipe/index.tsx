@@ -1,20 +1,16 @@
 import cc from 'classcat';
 import React, { FC } from 'react';
-import { graphql, PageProps } from 'gatsby';
 import { useStyles } from 'react-treat';
-
-import * as styleRefs from './recipe.treat';
 import MainLayout from '../../components/layouts/main';
-import { Query } from '../../graphql/types';
+import { Box, Heading } from '../../ds';
+import * as styleRefs from './recipe.treat';
 
-interface RecipeProps {
+interface Recipe {
   content: string;
   title: string;
 }
 
-import { Box, Heading } from '../../ds';
-
-export const Recipe: FC<RecipeProps> = ({ content, title }) => {
+export const Recipe: FC<Recipe> = ({ content, title }) => {
   let styles = useStyles(styleRefs);
 
   return (
@@ -34,42 +30,19 @@ export const Recipe: FC<RecipeProps> = ({ content, title }) => {
   );
 };
 
-interface RecipeTemplateProps extends PageProps {
-  data: Query;
+interface RecipeTemplateProps {
+  siteTitle: string;
+  recipe: Recipe;
 }
 
-const RecipeTemplate = ({ data }: RecipeTemplateProps) => {
-  const recipe = data.markdownRemark!;
-  const frontmatter = recipe.frontmatter!;
-  const title = frontmatter.title!;
-  const siteTitle = data.site!.siteMetadata!.title!;
-
-  const pageTitle = `${siteTitle} | Recipe - ${title}`;
+const RecipeTemplate = ({ siteTitle, recipe }: RecipeTemplateProps) => {
+  const pageTitle = `${siteTitle} | Recipe - ${recipe.title}`;
 
   return (
     <MainLayout pageTitle={pageTitle} siteTitle={siteTitle}>
-      <Recipe title={title} content={recipe.html!} />
+      <Recipe title={recipe.title} content={recipe.content} />
     </MainLayout>
   );
 };
 
 export default RecipeTemplate;
-
-export const pageQuery = graphql`
-  query RecipeBySlug($slug: String!) {
-    site {
-      siteMetadata {
-        title
-      }
-    }
-
-    markdownRemark(fields: { slug: { eq: $slug } }) {
-      id
-      excerpt(pruneLength: 160)
-      html
-      frontmatter {
-        title
-      }
-    }
-  }
-`;

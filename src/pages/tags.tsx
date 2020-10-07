@@ -1,20 +1,17 @@
 import React, { FC } from 'react';
-import { graphql } from 'gatsby';
 import { paramCase } from 'change-case';
 
-import { Query } from '../graphql/types';
 import MainLayout from '../components/layouts/main';
 import LinkList from '../components/link-list';
 import { Box, Heading } from '../ds';
 
-const TagsPage: FC<{ data: Query }> = ({ data }) => {
-  const group = data!.allMarkdownRemark!.group;
-  const siteTitle = data!.site!.siteMetadata!.title!;
-
-  const links = group.map((tag) => {
-    const fieldValue = tag.fieldValue!;
-    const href = `/tag/${paramCase(fieldValue)}/`;
-    const text = `${fieldValue} (${tag.totalCount})`;
+const TagsPage: FC<{
+  siteTitle: string;
+  tags: { name: string; totalCount: number }[];
+}> = ({ siteTitle, tags }) => {
+  const links = tags.map(({ name, totalCount }) => {
+    const href = `/tag/${paramCase(name)}/`;
+    const text = `${name} (${totalCount})`;
 
     return { href, text };
   });
@@ -32,19 +29,3 @@ const TagsPage: FC<{ data: Query }> = ({ data }) => {
 };
 
 export default TagsPage;
-
-export const pageQuery = graphql`
-  query {
-    site {
-      siteMetadata {
-        title
-      }
-    }
-    allMarkdownRemark(limit: 2000) {
-      group(field: frontmatter___tags) {
-        fieldValue
-        totalCount
-      }
-    }
-  }
-`;

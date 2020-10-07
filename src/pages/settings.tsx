@@ -1,7 +1,4 @@
 import React, { FC } from 'react';
-import { graphql } from 'gatsby';
-
-import { Query } from '../graphql/types';
 import MainLayout from '../components/layouts/main';
 import { Box, Button, Heading, Stack, Text } from '../ds';
 
@@ -99,13 +96,11 @@ function SiteInfo({
   );
 }
 
-const SettingsPage: FC<{ data: Query }> = ({ data }) => {
-  const siteMetadata = data!.site!.siteMetadata!;
-
-  const commit = siteMetadata.commit!;
-  const siteTitle = siteMetadata.title!;
-  const themeVersion = siteMetadata.themeVersion!;
-
+const SettingsPage: FC<{
+  commit: string;
+  siteTitle: string;
+  themeVersion: string;
+}> = ({ commit, siteTitle, themeVersion }) => {
   const pageTitle = `${siteTitle} | Settings`;
 
   return (
@@ -122,15 +117,3 @@ const SettingsPage: FC<{ data: Query }> = ({ data }) => {
 };
 
 export default SettingsPage;
-
-export const pageQuery = graphql`
-  query {
-    site {
-      siteMetadata {
-        commit
-        themeVersion
-        title
-      }
-    }
-  }
-`;

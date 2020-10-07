@@ -1,21 +1,18 @@
-import React, { useEffect, useMemo, FC } from 'react';
-import { graphql, PageProps } from 'gatsby';
 import { parse as parseQueryString } from 'query-string';
-import { navigate } from '@reach/router';
-
-import MainLayout from '../components/layouts/main';
-import { SearchPageDataQuery } from '../graphql/types';
+import React, { FC, useEffect, useMemo } from 'react';
 import SearchForm from '../components/search/form';
+import Search from '../components/search/search';
 import { Index } from '../components/search/search-index';
 import { Box } from '../ds';
-import Search from '../components/search/search';
+import MainLayout from '../components/layouts/main';
+
+function navigate(url: string) {
+  window.location.href = url;
+}
 
 const INDEX_FIELDS = ['source', 'tags', 'title'];
 
-const SearchPage: FC<PageProps<SearchPageDataQuery, null, null>> = ({
-  data,
-  location,
-}) => {
+const SearchPage: FC<SearchPageDataQuery> = ({ data, location }) => {
   let siteTitle = data.site!.siteMetadata!.title!;
 
   let query = parseQueryString(location.search).q as string | undefined;
@@ -41,7 +38,7 @@ const SearchPage: FC<PageProps<SearchPageDataQuery, null, null>> = ({
       sessionStorage.removeItem('queryBackup');
 
       if (!query && queryBackup) {
-        navigate(`?q=${queryBackup}`, { replace: true });
+        navigate(`?q=${queryBackup}`);
       }
     } catch (e) {}
   }, [query]);
@@ -59,31 +56,3 @@ const SearchPage: FC<PageProps<SearchPageDataQuery, null, null>> = ({
 };
 
 export default SearchPage;
-
-// The search index query must be performed in a page query rather than a
-// static query because page queries are properly revisioned by the offline
-// plugin.
-export const pageQuery = graphql`
-  query SearchPageData {
-    site {
-      siteMetadata {
-        title
-      }
-    }
-
-    searchIndexData: allMarkdownRemark(
-      sort: { fields: [frontmatter___title], order: ASC }
-    ) {
-      nodes {
-        fields {
-          slug
-        }
-        frontmatter {
-          source
-          tags
-          title
-        }
-      }
-    }
-  }
-`;

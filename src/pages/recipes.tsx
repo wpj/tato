@@ -1,20 +1,18 @@
 import React from 'react';
-import { graphql, PageProps } from 'gatsby';
 
 import MainLayout from '../components/layouts/main';
-import { Query } from '../graphql/types';
 import LinkList from '../components/link-list';
 import { Box, Heading } from '../ds';
 
-interface Props extends PageProps {
-  data: Query;
+interface Props {
+  recipes: { slug: string; title: string }[];
+  siteTitle: string;
 }
 
-const RecipeIndex = ({ data }: Props) => {
-  const siteTitle = data.site!.siteMetadata!.title!;
-  const items = data.allMarkdownRemark.edges.map(({ node }) => {
-    const href = node.fields!.slug!;
-    const text = node.frontmatter?.title || href;
+const RecipeIndex = ({ siteTitle, recipes }: Props) => {
+  const items = recipes.map(({ slug, title }) => {
+    const href = slug;
+    const text = title || href;
     return { href, text };
   });
 
@@ -31,26 +29,3 @@ const RecipeIndex = ({ data }: Props) => {
 };
 
 export default RecipeIndex;
-
-export const pageQuery = graphql`
-  query {
-    site {
-      siteMetadata {
-        title
-      }
-    }
-    allMarkdownRemark(sort: { fields: [frontmatter___title], order: ASC }) {
-      edges {
-        node {
-          excerpt
-          fields {
-            slug
-          }
-          frontmatter {
-            title
-          }
-        }
-      }
-    }
-  }
-`;
