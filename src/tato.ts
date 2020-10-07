@@ -17,8 +17,12 @@ import sade from 'sade';
 import { totalist } from 'totalist';
 import unified from 'unified';
 import { copyDirectory } from './build/copy-directory';
-import { remarkImages } from './build/remark-images';
+import { processImages } from './build/process-images';
 import { createWebpackConfig } from './build/webpack';
+
+let sharedProps = {
+  siteTitle: 'Tato',
+};
 
 const templates = {
   index: require.resolve('./pages/index.js'),
@@ -60,15 +64,16 @@ async function getAndCreateRecipe(store: Store<Templates>, recipePath: string) {
     .use(remarkFrontmatter, ['yaml'])
     .parse(markdown);
 
-  let transformedMarkdown = (await unified()
-    .use(remarkImages, { store, contentDirectory })
-    .run(markdownAst)) as Root;
+  let transformedMarkdown = (await unified().run(markdownAst)) as Root;
 
   let frontmatter = extractFrontmatter<{ tags: string[]; title: string }>(
     transformedMarkdown,
   );
 
-  let hast = await unified().use(remarkToRehype).run(markdownAst);
+  let hast = await unified()
+    .use(remarkToRehype)
+    .use(processImages, { store, contentDirectory })
+    .run(markdownAst);
 
   // @ts-ignore
   let html = unified().use(rehypeStringify).stringify(hast);
@@ -107,6 +112,7 @@ export async function createRecipePage(
       props: {
         content,
         title,
+        ...sharedProps,
       },
     };
   });
@@ -132,6 +138,7 @@ async function getStore({ dir }: { dir: string }): Promise<Store<Templates>> {
     template: 'index',
     props: {
       title: 'Tato',
+      ...sharedProps,
     },
   }));
 
@@ -140,7 +147,7 @@ async function getStore({ dir }: { dir: string }): Promise<Store<Templates>> {
       template: 'recipe_index',
       props: {
         recipes: [],
-        siteTitle: 'Tato',
+        ...sharedProps,
       },
     };
   });
@@ -150,7 +157,7 @@ async function getStore({ dir }: { dir: string }): Promise<Store<Templates>> {
       template: 'tag_index',
       props: {
         tags: [],
-        siteTitle: 'Tato',
+        ...sharedProps,
       },
     };
   });
