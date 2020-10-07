@@ -1,6 +1,7 @@
 // This must be imported first and it must be done here and not in
 // gatsby-browser.js.
 import '../../../ds/reset';
+import '../../../global/style.css';
 
 import React, { FC } from 'react';
 import { Helmet } from 'react-helmet';

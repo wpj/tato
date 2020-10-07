@@ -2,7 +2,11 @@ import cc from 'classcat';
 import React, { useRef, SyntheticEvent } from 'react';
 import { useStyles } from 'react-treat';
 import { Search as SearchIcon } from 'react-feather';
-import { navigate } from 'gatsby-link';
+
+function navigate(url: string, state: unknown) {
+  // TODO: fix me
+  history.pushState(state, '', url);
+}
 
 import { FormPreset } from './types';
 import { Box, Text } from '../../ds';

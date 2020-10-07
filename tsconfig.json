@@ -21,5 +21,10 @@
     "strictNullChecks": true,
     "target": "esnext"
   },
-  "include": ["packages/*/src/**/*.ts", "packages/*/src/**/*.tsx"]
+  "include": ["src"],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  }
 }

@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import { Link as GatsbyLink } from 'gatsby';
 import { Link as StyledLink } from '../ds';
 
 const CompatLink: FC<{ className: string; href: string }> = ({
@@ -8,9 +7,9 @@ const CompatLink: FC<{ className: string; href: string }> = ({
   href,
 }) => {
   return (
-    <GatsbyLink className={className} to={href}>
+    <a className={className} href={href}>
       {children}
-    </GatsbyLink>
+    </a>
   );
 };
 
