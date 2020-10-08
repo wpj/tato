@@ -70,13 +70,13 @@ export const processImages: Plugin = ({
 
         let placeholder: Element = h(
           'element',
-          { tagName: 'div', properties: {} },
+          { tagName: 'span', properties: {} },
           [],
         );
 
         let wrapper: Element = h(
           'element',
-          { tagName: 'div', properties: {} },
+          { tagName: 'span', properties: {} },
           [placeholder, image],
         );
 
@@ -117,6 +117,7 @@ export const processImages: Plugin = ({
             'max-width': `${maxWidth}px`,
             'margin-left': 'auto',
             'margin-right': 'auto',
+            display: 'block',
             position: 'relative',
           }),
         });
@@ -127,6 +128,7 @@ export const processImages: Plugin = ({
             'background-size': 'cover',
             'padding-bottom': `${aspectRatio * 100}%`,
             bottom: '0',
+            display: 'block',
             left: '0',
             overflow: 'hidden',
             position: 'relative',
