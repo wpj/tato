@@ -57,6 +57,7 @@ async function getAndCreateRecipe(store: Store<Templates>, recipePath: string) {
   let resolvedPath = resolvePath(recipePath);
 
   let contentDirectory = dirname(resolvedPath);
+
   let markdown = await fs.readFile(resolvedPath, 'utf8');
 
   let markdownAst = unified()
@@ -176,6 +177,7 @@ prog
   )
   .action(async ({ dir }) => {
     let site = new Site({
+      dev: false,
       templates,
       webpackConfig: createWebpackConfig({ dev: false }),
     });

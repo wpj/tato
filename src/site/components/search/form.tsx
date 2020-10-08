@@ -1,7 +1,7 @@
 import cc from 'classcat';
 import React, { useRef, SyntheticEvent } from 'react';
 import { useStyles } from 'react-treat';
-import { Search as SearchIcon } from 'react-feather';
+import SearchIcon from '../../icons/search';
 
 function navigate(url: string, state: unknown) {
   // TODO: fix me
@@ -65,7 +65,7 @@ export default function SearchForm({
           px="small"
         >
           <Text color="darkgray" size="small">
-            <SearchIcon className={formStyles.icon} width="1em" height="1em" />
+            <SearchIcon className={formStyles.icon} />
           </Text>
         </Box>
         <label className={formStyles.hide} htmlFor="search-text">

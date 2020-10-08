@@ -5,17 +5,14 @@ import TreatPlugin from 'treat/webpack-plugin';
 
 export function createWebpackConfig({ dev }: { dev: boolean }) {
   let config = createPresetWebpackConfig({ dev });
-  config.client.plugins = config.client.plugins || [];
+
+  config.server.plugins = config.server.plugins ?? [];
+  config.server.plugins.push(new TreatPlugin({ outputCSS: false }));
+
+  config.client.plugins = config.client.plugins ?? [];
   config.client.plugins.push(
     new TreatPlugin({
-      outputLoaders: dev ? undefined : [MiniCssExtractPlugin.loader],
-    }),
-  );
-
-  config.server.plugins = config.server.plugins || [];
-  config.server.plugins.push(
-    new TreatPlugin({
-      outputCSS: false,
+      outputLoaders: [dev ? 'style-loader' : MiniCssExtractPlugin.loader],
     }),
   );
 

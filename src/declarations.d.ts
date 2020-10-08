@@ -13,3 +13,5 @@ declare module 'hast-util-select' {
     namespace?: string,
   ): Element[];
 }
+
+declare module 'lqip';
