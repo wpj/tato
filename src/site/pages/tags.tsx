@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import { paramCase } from 'change-case';
 
 import MainLayout from '../components/layouts/main';
 import LinkList from '../components/link-list';
@@ -7,13 +6,12 @@ import { Box, Heading } from '../ds';
 
 const TagsPage: FC<{
   siteTitle: string;
-  tags: { name: string; totalCount: number }[];
+  tags: { count: number; name: string; slug: string }[];
 }> = ({ siteTitle, tags }) => {
-  const links = tags.map(({ name, totalCount }) => {
-    const href = `/tag/${paramCase(name)}/`;
-    const text = `${name} (${totalCount})`;
+  const links = tags.map(({ count, name, slug }) => {
+    const text = `${name} (${count})`;
 
-    return { href, text };
+    return { href: slug, text };
   });
 
   const pageTitle = `${siteTitle} | Tags`;

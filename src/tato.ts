@@ -1,4 +1,5 @@
 import { Site } from '@julienne/react';
+import { paramCase } from 'change-case';
 import { promises as fs } from 'fs';
 import { safeLoad } from 'js-yaml';
 import { Store } from 'julienne';
@@ -20,6 +21,8 @@ import { copyDirectory } from './build/copy-directory';
 import { processImages } from './build/process-images';
 import { createWebpackConfig } from './build/webpack';
 
+let runtime = require.resolve('./runtime');
+
 let sharedProps = {
   siteTitle: 'Tato',
 };
@@ -30,7 +33,7 @@ const templates = {
   settings: require.resolve('./pages/settings.js'),
   tag_index: require.resolve('./pages/tags.js'),
   recipe: require.resolve('./templates/recipe/index.js'),
-  // tag: require.resolve('./templates/tag/index.js'),
+  tag: require.resolve('./templates/tag/index.js'),
 };
 
 function extractFrontmatter<T>(node: Root) {
@@ -82,6 +85,8 @@ async function getAndCreateRecipe(store: Store<Templates>, recipePath: string) {
   let recipe = {
     content: html,
     title: frontmatter.title,
+    slug: slugifyRecipePath(recipePath),
+    tags: frontmatter.tags ?? [],
   };
 
   recipeCache.set(recipePath, recipe);
@@ -97,26 +102,8 @@ function slugifyRecipePath(recipePath: string) {
   return `/recipe/${slug}`;
 }
 
-/**
- * Creates a page for each recipe and processes its images.
- */
-export async function createRecipePage(
-  store: Store<Templates>,
-  recipePath: string,
-) {
-  let slug = slugifyRecipePath(recipePath);
-  store.createPage(slug, async () => {
-    let { content, title } = await getAndCreateRecipe(store, recipePath);
-
-    return {
-      template: 'recipe',
-      props: {
-        content,
-        title,
-        ...sharedProps,
-      },
-    };
-  });
+function slugifyTag(tag: string): string {
+  return `/tag/${paramCase(tag)}/`;
 }
 
 type Templates = typeof templates;
@@ -124,16 +111,38 @@ type Templates = typeof templates;
 async function getStore({ dir }: { dir: string }): Promise<Store<Templates>> {
   let store = new Store<Templates>();
 
-  await copyDirectory(store, resolvePath('./static'), '/');
+  await copyDirectory(store, pathJoin(__dirname, './static'), '/');
 
-  let recipes: string[] = [];
+  let recipePaths: string[] = [];
 
   await totalist(dir, (_rel, abs) => {
     if (abs.endsWith('.md')) {
-      recipes.push(abs);
-      createRecipePage(store, abs);
+      recipePaths.push(abs);
     }
   });
+
+  let tags = new Map();
+
+  let recipes = await Promise.all(
+    recipePaths.map(async (path) => {
+      let recipe = await getAndCreateRecipe(store, path);
+
+      recipe.tags.forEach((tagName: string) => {
+        let tag = tags.get(tagName) ?? { name: tagName, count: 0, recipes: [] };
+
+        tag.count += 1;
+
+        tag.recipes.push({
+          title: recipe.title,
+          slug: recipe.slug,
+        });
+
+        tags.set(tagName, tag);
+      });
+
+      return recipe;
+    }),
+  );
 
   store.createPage('/', () => ({
     template: 'index',
@@ -143,11 +152,34 @@ async function getStore({ dir }: { dir: string }): Promise<Store<Templates>> {
     },
   }));
 
+  recipes.forEach((recipe) => {
+    store.createPage(recipe.slug, () => ({
+      template: 'recipe',
+      props: {
+        content: recipe.content,
+        title: recipe.title,
+        ...sharedProps,
+      },
+    }));
+  });
+
+  tags.forEach((tag) => {
+    let slug = slugifyTag(tag.name);
+    store.createPage(slug, () => ({
+      template: 'tag',
+      props: {
+        name: tag.name,
+        slug,
+        recipes: tag.recipes,
+      },
+    }));
+  });
+
   store.createPage('/recipes/', async () => {
     return {
       template: 'recipe_index',
       props: {
-        recipes: [],
+        recipes,
         ...sharedProps,
       },
     };
@@ -157,7 +189,7 @@ async function getStore({ dir }: { dir: string }): Promise<Store<Templates>> {
     return {
       template: 'tag_index',
       props: {
-        tags: [],
+        tags: Array.from(tags.values()),
         ...sharedProps,
       },
     };
@@ -178,6 +210,7 @@ prog
   .action(async ({ dir }) => {
     let site = new Site({
       dev: false,
+      runtime,
       templates,
       webpackConfig: createWebpackConfig({ dev: false }),
     });
@@ -197,6 +230,7 @@ prog
   .action(async ({ dir }) => {
     let site = new Site({
       dev: true,
+      runtime,
       templates,
       webpackConfig: createWebpackConfig({ dev: true }),
     });

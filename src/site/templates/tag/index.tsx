@@ -5,24 +5,24 @@ import LinkList from '../../components/link-list';
 import { Box, Heading } from '../../ds';
 
 interface Props {
-  recipes: { href: string; title: string }[];
+  recipes: { slug: string; title: string }[];
   siteTitle: string;
-  tag: string;
+  name: string;
 }
 
-const TagTemplate = ({ recipes, siteTitle, tag }: Props) => {
-  const items = recipes.map(({ href, title }) => {
-    const text = title || href;
-    return { href, text };
+const TagTemplate = ({ recipes, siteTitle, name }: Props) => {
+  const items = recipes.map(({ slug, title }) => {
+    const text = title || slug;
+    return { href: slug, text };
   });
 
-  const pageTitle = `${siteTitle} | Tag - ${tag}`;
+  const pageTitle = `${siteTitle} | Tag - ${name}`;
 
   return (
     <MainLayout pageTitle={pageTitle} siteTitle={siteTitle}>
       <Box px={['medium', 'large']} my={['medium', 'large']}>
         <Heading align="center" level="1">
-          Tag: {tag}
+          Tag: {name}
         </Heading>
       </Box>
       <LinkList items={items} />

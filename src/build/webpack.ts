@@ -2,19 +2,41 @@ import { createWebpackConfig as createPresetWebpackConfig } from '@julienne/reac
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 // @ts-ignore
 import TreatPlugin from 'treat/webpack-plugin';
+import merge from 'webpack-merge';
+
+let urlLoader = {
+  test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/i,
+  use: [
+    {
+      loader: require.resolve('url-loader'),
+      options: {
+        name: 'static/fonts/[name]-[contenthash].[ext]',
+        limit: 1000,
+      },
+    },
+  ],
+};
 
 export function createWebpackConfig({ dev }: { dev: boolean }) {
   let config = createPresetWebpackConfig({ dev });
 
-  config.server.plugins = config.server.plugins ?? [];
-  config.server.plugins.push(new TreatPlugin({ outputCSS: false }));
+  let server = merge(config.server, {
+    module: {
+      rules: [urlLoader],
+    },
+    plugins: [new TreatPlugin({ outputCSS: false })],
+  });
 
-  config.client.plugins = config.client.plugins ?? [];
-  config.client.plugins.push(
-    new TreatPlugin({
-      outputLoaders: [dev ? 'style-loader' : MiniCssExtractPlugin.loader],
-    }),
-  );
+  let client = merge(config.client, {
+    module: {
+      rules: [urlLoader],
+    },
+    plugins: [
+      new TreatPlugin({
+        outputLoaders: [dev ? 'style-loader' : MiniCssExtractPlugin.loader],
+      }),
+    ],
+  });
 
-  return config;
+  return { client, server };
 }
