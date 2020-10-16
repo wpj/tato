@@ -15,3 +15,5 @@ declare module 'hast-util-select' {
 }
 
 declare module 'lqip';
+
+declare module 'treat/webpack-plugin';

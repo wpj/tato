@@ -1,7 +1,7 @@
 import { createWebpackConfig as createPresetWebpackConfig } from '@julienne/react';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-// @ts-ignore
 import TreatPlugin from 'treat/webpack-plugin';
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import merge from 'webpack-merge';
 
 let urlLoader = {
@@ -17,7 +17,13 @@ let urlLoader = {
   ],
 };
 
-export function createWebpackConfig({ dev }: { dev: boolean }) {
+export function createWebpackConfig({
+  analyze,
+  dev,
+}: {
+  analyze: boolean;
+  dev: boolean;
+}) {
   let config = createPresetWebpackConfig({ dev });
 
   let server = merge(config.server, {
@@ -31,11 +37,23 @@ export function createWebpackConfig({ dev }: { dev: boolean }) {
     module: {
       rules: [urlLoader],
     },
+    optimization: {
+      splitChunks: {
+        name: false,
+        maxInitialRequests: 25,
+        minSize: 20000,
+      },
+    },
+    performance: {
+      maxAssetSize: 300 * 1024,
+      maxEntrypointSize: 300 * 1024,
+    },
     plugins: [
       new TreatPlugin({
         outputLoaders: [dev ? 'style-loader' : MiniCssExtractPlugin.loader],
       }),
-    ],
+      analyze ? new BundleAnalyzerPlugin({ analyzerMode: 'static' }) : null,
+    ].filter(Boolean),
   });
 
   return { client, server };

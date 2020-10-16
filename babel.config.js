@@ -1,18 +1,22 @@
 module.exports = (api) => {
-  let isNode = api.env('node');
+  let plugins = [
+    '@babel/plugin-proposal-optional-chaining',
+    '@babel/plugin-proposal-class-properties',
+    '@babel/plugin-proposal-object-rest-spread',
+  ];
 
-  return {
-    plugins: [
-      '@babel/plugin-proposal-optional-chaining',
-      '@babel/plugin-proposal-class-properties',
-      '@babel/plugin-proposal-object-rest-spread',
-    ],
-    presets: [
-      '@babel/preset-typescript',
-      '@babel/preset-react',
-      isNode
-        ? ['@babel/preset-env', { targets: { node: 'current' } }]
-        : '@babel/preset-env',
-    ],
-  };
+  let presets = ['@babel/preset-typescript', '@babel/preset-react'];
+
+  // Don't use preset-env when compiling the CLI or the site components for npm.
+  if (!api.env('site') && !api.env('cli')) {
+    presets.push([
+      '@babel/preset-env',
+      {
+        corejs: '3',
+        useBuiltIns: 'usage',
+      },
+    ]);
+  }
+
+  return { plugins, presets };
 };

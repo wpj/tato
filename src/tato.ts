@@ -203,22 +203,38 @@ let prog = sade('tato');
 prog
   .command('build')
   .option(
+    '--analyze-build',
+    'Inspect webpack output with webpack-bundle-analyzer',
+    false,
+  )
+  .option(
     '--dir -d',
     'Directory containing markdown files to render',
     pathJoin(process.cwd(), 'recipes'),
   )
-  .action(async ({ dir }) => {
-    let site = new Site({
-      dev: false,
-      runtime,
-      templates,
-      webpackConfig: createWebpackConfig({ dev: false }),
-    });
+  .action(
+    async ({
+      'analyze-build': analyze,
+      dir,
+    }: {
+      'analyze-build': boolean;
+      dir: string;
+    }) => {
+      let site = new Site({
+        dev: false,
+        runtime,
+        templates,
+        webpackConfig: createWebpackConfig({
+          analyze,
+          dev: false,
+        }),
+      });
 
-    let store = await getStore({ dir: resolvePath(dir) });
+      let store = await getStore({ dir: resolvePath(dir) });
 
-    await site.build({ store });
-  });
+      await site.build({ store });
+    },
+  );
 
 prog
   .command('dev')
@@ -227,12 +243,12 @@ prog
     'Directory containing markdown files to render',
     pathJoin(process.cwd(), 'recipes'),
   )
-  .action(async ({ dir }) => {
+  .action(async ({ dir }: { dir: string }) => {
     let site = new Site({
       dev: true,
       runtime,
       templates,
-      webpackConfig: createWebpackConfig({ dev: true }),
+      webpackConfig: createWebpackConfig({ analyze: false, dev: true }),
     });
 
     let store = await getStore({ dir: resolvePath(dir) });
