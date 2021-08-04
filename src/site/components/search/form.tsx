@@ -1,17 +1,11 @@
 import cc from 'classcat';
-import React, { useRef, SyntheticEvent } from 'react';
-import { useStyles } from 'react-treat';
-import SearchIcon from '../../icons/search';
-
-function navigate(url: string, state: unknown) {
-  // TODO: fix me
-  history.pushState(state, '', url);
-}
-
-import { FormPreset } from './types';
+import React, { SyntheticEvent, useRef } from 'react';
 import { Box, Text } from '../../ds';
-import * as formRefs from './form.treat';
 import { useReset } from '../../ds/hooks';
+import SearchIcon from '../../icons/search';
+import * as formStyles from './form.css';
+import { FormPreset } from './types';
+import { useRouting, Routing } from '../../routing';
 
 interface Props {
   autoFocus?: boolean;
@@ -19,14 +13,14 @@ interface Props {
   preset: FormPreset;
 }
 
-function search(query: string) {
+function search(navigate: Routing['navigate'], query: string) {
   // Back up the query to session storage in case gatsby force refreshes the
   // page after a site update.
   try {
     sessionStorage.setItem('queryBackup', query);
   } catch (e) {}
 
-  navigate(`/search/?q=${query}`, { state: { query } });
+  navigate(`/search/?q=${query}`);
 }
 
 export default function SearchForm({
@@ -34,8 +28,8 @@ export default function SearchForm({
   preset,
   initialQuery = '',
 }: Props) {
+  let { navigate } = useRouting();
   let inputRef = useRef<HTMLInputElement>(null);
-  let formStyles = useStyles(formRefs);
   let reset = useReset('input');
 
   function handleSubmit(e: SyntheticEvent<HTMLFormElement>) {
@@ -44,7 +38,7 @@ export default function SearchForm({
     let query = inputRef.current?.value;
 
     if (query) {
-      search(query);
+      search(navigate, query);
     }
   }
 
@@ -72,7 +66,7 @@ export default function SearchForm({
           Search
         </label>
         <input
-          autoCapitalize="off"
+          autoCapitalize="none"
           autoCorrect="off"
           autoFocus={autoFocus}
           className={cc([

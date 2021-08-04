@@ -21,11 +21,6 @@
     "strictNullChecks": true,
     "target": "esnext"
   },
-  "include": ["src"],
-  "exclude": ["node_modules"],
-  "ts-node": {
-    "compilerOptions": {
-      "module": "commonjs"
-    }
-  }
+  "include": ["src", "tools"],
+  "exclude": ["node_modules"]
 }

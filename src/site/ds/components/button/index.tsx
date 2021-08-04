@@ -1,11 +1,10 @@
 import cc from 'classcat';
 import React, { ButtonHTMLAttributes, FC } from 'react';
 
-import {
-  useColorStyles,
-  useBorderStyles,
-  useTypographyStyles,
-} from '../../hooks';
+import * as colorStyles from '../../../ds/styles/color.css';
+import * as borderStyles from '../../../ds/styles/border.css';
+import * as typographyStyles from '../../../ds/styles/typography.css';
+
 import { Text } from '../text';
 import { Box } from '../box';
 
@@ -14,10 +13,6 @@ export const Button: FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({
   children,
   ...props
 }) => {
-  let borderStyles = useBorderStyles();
-  let colorStyles = useColorStyles();
-  let typographyStyles = useTypographyStyles();
-
   return (
     <button
       {...props}

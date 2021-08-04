@@ -1,24 +1,8 @@
 import '@testing-library/jest-dom/extend-expect';
-
-import React from 'react';
 import { render } from '@testing-library/react';
-import { TreatProvider } from 'react-treat';
-
-import { SearchDocument } from './types';
-import theme from '../../ds/theme/theme.treat';
+import React from 'react';
 import Results from './results';
-
-type RenderParams = Parameters<typeof render>;
-
-function renderWithProvider(
-  element: RenderParams[0],
-  options?: RenderParams[1],
-) {
-  return render(
-    <TreatProvider theme={theme}>{element}</TreatProvider>,
-    options,
-  );
-}
+import { SearchDocument } from './types';
 
 const searchDocuments: SearchDocument[] = [
   {
@@ -37,7 +21,7 @@ const searchDocuments: SearchDocument[] = [
 
 describe('Results', () => {
   test('displays "no results" when empty items are passed', () => {
-    const { queryAllByTestId, queryByTestId } = renderWithProvider(
+    const { queryAllByTestId, queryByTestId } = render(
       <Results items={null} />,
     );
 
@@ -49,7 +33,7 @@ describe('Results', () => {
   });
 
   test('displays pluralized results when a single item is passed', () => {
-    const { queryAllByTestId, queryByTestId } = renderWithProvider(
+    const { queryAllByTestId, queryByTestId } = render(
       <Results items={[searchDocuments[0]]} />,
     );
 
@@ -61,7 +45,7 @@ describe('Results', () => {
   });
 
   test('displays pluralized results when multiple items are passed', () => {
-    const { queryAllByTestId, queryByTestId } = renderWithProvider(
+    const { queryAllByTestId, queryByTestId } = render(
       <Results items={searchDocuments} />,
     );
 

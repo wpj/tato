@@ -1,1 +1,1 @@
-import './styles/reset.treat';
+import './styles/reset.css';

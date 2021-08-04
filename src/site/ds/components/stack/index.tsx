@@ -1,10 +1,10 @@
 import cc from 'classcat';
 import React, { FC } from 'react';
-import { Theme } from 'treat/theme';
-
-import { Box } from '../box';
-import { useBorderStyles, useSpaceStyles } from '../../hooks';
+import * as borderStyles from '../../../ds/styles/border.css';
+import * as spaceStyles from '../../../ds/styles/space.css';
+import type { Theme } from '../../../ds/theme/theme.css';
 import { resolve, ResponsiveProp } from '../../helpers/runtime';
+import { Box } from '../box';
 
 type ResponsiveSpace = ResponsiveProp<keyof Theme['space']>;
 
@@ -26,9 +26,6 @@ export const Stack: FC<Props> = ({
   horizontal = false,
   space,
 }) => {
-  let borderStyles = useBorderStyles();
-  let spaceStyles = useSpaceStyles();
-
   let cls = cc([
     className,
     divide &&

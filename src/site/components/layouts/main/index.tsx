@@ -6,8 +6,7 @@ import { Helmet } from 'react-helmet';
 
 import { Box } from '../../../ds';
 import Nav from '../../nav';
-import { Provider } from '../../provider';
-import { container } from '../../../styles/shared.treat';
+import { container } from '../../../styles/shared.css';
 
 interface Props {
   showSearch?: boolean;
@@ -22,7 +21,7 @@ const MainLayout: FC<Props> = ({
   children,
 }) => {
   return (
-    <Provider>
+    <>
       <Helmet htmlAttributes={{ lang: 'en' }}>
         <title>{pageTitle}</title>
       </Helmet>
@@ -32,7 +31,7 @@ const MainLayout: FC<Props> = ({
       <Box mx="auto" className={container} as="main">
         <Box mx="large">{children}</Box>
       </Box>
-    </Provider>
+    </>
   );
 };
 

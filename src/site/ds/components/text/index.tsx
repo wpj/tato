@@ -1,17 +1,13 @@
 import cc from 'classcat';
 import React, { ElementType, FC } from 'react';
-import { Theme } from 'treat/theme';
-
-import {
-  useTypographyStyles,
-  useColorStyles,
-  useReset,
-  ColorStyles,
-  TypographyStyles,
-} from '../../hooks';
-
+import * as colorStyles from '../../../ds/styles/color.css';
+import * as typographyStyles from '../../../ds/styles/typography.css';
+import type { Theme } from '../../../ds/theme/theme.css';
 import { resolve, ResponsiveProp } from '../../helpers/runtime';
+import { useReset } from '../../hooks';
 
+type TypographyStyles = typeof typographyStyles;
+type ColorStyles = typeof colorStyles;
 type FontSize = keyof Theme['fontSize'];
 
 export interface Props {
@@ -35,8 +31,6 @@ export const Text: FC<Props> = ({
   whitespace,
   ...props
 }) => {
-  let colorStyles = useColorStyles();
-  let typographyStyles = useTypographyStyles();
   let reset = useReset(Component);
 
   let cls = cc([

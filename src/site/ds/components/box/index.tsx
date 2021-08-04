@@ -1,20 +1,17 @@
 import cc from 'classcat';
-import React, { ElementType, FC, CSSProperties } from 'react';
-import { Theme } from 'treat/theme';
-
+import React, { CSSProperties, ElementType, FC } from 'react';
+import * as borderStyles from '../../../ds/styles/border.css';
+import * as colorStyles from '../../../ds/styles/color.css';
+import * as layoutStyles from '../../../ds/styles/layout.css';
+import * as sizeStyles from '../../../ds/styles/size.css';
+import * as spaceStyles from '../../../ds/styles/space.css';
+import { Theme } from '../../../ds/theme/theme.css';
 import { resolve, ResponsiveProp } from '../../helpers/runtime';
+import { useReset } from '../../hooks';
 
-import {
-  useSizeStyles,
-  useSpaceStyles,
-  useColorStyles,
-  useBorderStyles,
-  useLayoutStyles,
-  useReset,
-  ColorStyles,
-  SizeStyles,
-  LayoutStyles,
-} from '../../hooks';
+type ColorStyles = typeof colorStyles;
+type LayoutStyles = typeof layoutStyles;
+type SizeStyles = typeof sizeStyles;
 
 type Space = keyof Theme['space'];
 type ResponsiveSpace = ResponsiveProp<Space>;
@@ -124,22 +121,17 @@ export const Box: FC<Props> = ({
 
   ...props
 }) => {
-  let spaceStyles = useSpaceStyles();
-  let colorStyles = useColorStyles();
-  let layoutStyles = useLayoutStyles();
-  let sizeStyles = useSizeStyles();
-  let borderStyles = useBorderStyles();
   let reset = useReset(Component);
 
-  let marginTop = mt || my || m;
-  let marginBottom = mb || my || m;
-  let marginLeft = ml || mx || m;
-  let marginRight = mr || mx || m;
+  let marginTop = mt ?? my ?? m;
+  let marginBottom = mb ?? my ?? m;
+  let marginLeft = ml ?? mx ?? m;
+  let marginRight = mr ?? mx ?? m;
 
-  let paddingTop = pt || py || p;
-  let paddingBottom = pb || py || p;
-  let paddingLeft = pl || px || p;
-  let paddingRight = pr || px || p;
+  let paddingTop = pt ?? py ?? p;
+  let paddingBottom = pb ?? py ?? p;
+  let paddingLeft = pl ?? px ?? p;
+  let paddingRight = pr ?? px ?? p;
 
   const borderPresetStyles = border ? borderPresets[border] : null;
 

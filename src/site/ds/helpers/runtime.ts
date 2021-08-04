@@ -1,23 +1,28 @@
-export type ResponsiveProp<Atom> =
-  | Atom
-  | Readonly<[Atom, Atom]>
-  | Readonly<[Atom, Atom, Atom]>;
+type ResponsiveAtom<Atom> = Partial<Record<'sm' | 'md' | 'lg', Atom>>;
+export type ResponsiveProp<Atom> = Atom | ResponsiveAtom<Atom>;
 
-type Map<Atom extends string | number> = Record<Atom, string[]>;
+type Map<Atom extends string | number> = Record<
+  Atom,
+  Partial<Record<'sm' | 'md' | 'lg', string>>
+>;
+
+function isResponsive<Atom>(
+  val: ResponsiveProp<Atom>,
+): val is ResponsiveAtom<Atom> {
+  return typeof val !== 'string' &&  typeof val !== 'number';
+}
 
 export function resolve<Atom extends string | number>(
   value: ResponsiveProp<Atom>,
   map: Map<Atom>,
 ) {
-  function isAtom(val: ResponsiveProp<Atom>): val is Atom {
-    return typeof val === 'string' || typeof val === 'number';
-  }
-
-  if (isAtom(value)) {
-    return map[value][0];
+  if (!isResponsive(value)) {
+    return map[value].sm;
   } else {
-    return value.map((val, index) => {
-      return map[val][index];
-    });
+    const { sm, md, lg } = value;
+
+    return [sm && map[sm].sm, md && map[md].md, lg && map[lg].lg].filter((v) =>
+      Boolean(v),
+    );
   }
 }

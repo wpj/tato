@@ -10,7 +10,7 @@ interface LinkItem {
 
 const PostIndex = ({ items }: { items: LinkItem[] }) => {
   return (
-    <List space={['medium', 'large']}>
+    <List space={{ sm: 'medium', md: 'large' }}>
       {items.map((item) => {
         return (
           <li key={item.href}>

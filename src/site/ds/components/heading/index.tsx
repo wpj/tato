@@ -1,14 +1,12 @@
 import cc from 'classcat';
 import React, { FC } from 'react';
-import { Theme } from 'treat/theme';
-
-import { Box } from '../box';
+import * as colorStyles from '../../../ds/styles/color.css';
+import * as typographyStyles from '../../../ds/styles/typography.css';
+import type { vars } from '../../../ds/theme/theme.css';
 import { resolve, ResponsiveProp } from '../../helpers/runtime';
-import {
-  useColorStyles,
-  useTypographyStyles,
-  TypographyStyles,
-} from '../../hooks';
+import { Box } from '../box';
+
+type TypographyStyles = typeof typographyStyles;
 
 type HeadingLevel = '1' | '2' | '3' | '4';
 
@@ -31,14 +29,14 @@ const styleMap = {
   },
 } as const;
 
-type FontWeight = keyof Theme['fontWeight'];
-type FontSize = keyof Theme['fontSize'];
+type FontWeight = keyof typeof vars.fontWeight;
+type FontSize = keyof typeof vars.fontSize;
 
 export interface Props {
   align?: keyof TypographyStyles['textAlign'];
   className?: string;
-  color?: keyof Theme['colors'];
-  fontFamily?: keyof Theme['fontFamily'];
+  color?: keyof typeof vars.colors;
+  fontFamily?: keyof typeof vars.fontFamily;
   level: HeadingLevel;
   size?: ResponsiveProp<FontSize>;
   weight?: ResponsiveProp<FontWeight>;
@@ -54,9 +52,6 @@ export const Heading: FC<Props> = ({
   size,
   weight,
 }) => {
-  let typographyStyles = useTypographyStyles();
-  let colorStyles = useColorStyles();
-
   let preset = styleMap[level];
 
   let as = `h${level}` as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';

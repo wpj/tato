@@ -2,7 +2,7 @@ import cc from 'classcat';
 import React, { FC } from 'react';
 
 import { Stack, Props as StackProps } from '../stack';
-import * as listRefs from './list.treat';
+import * as listRefs from './list.css';
 
 export type Props = Pick<StackProps, 'space'>;
 

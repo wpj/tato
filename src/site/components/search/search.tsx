@@ -6,7 +6,7 @@ import { Index } from './search-index';
 
 interface Props {
   query: string;
-  searchIndex: Index;
+  searchIndex: Index | null;
 }
 
 export default function Search({ query, searchIndex }: Props) {

@@ -1,7 +1,7 @@
 import { createReadStream } from 'fs';
 import hasha from 'hasha';
 import type { Element, Node } from 'hast';
-import type { Store } from 'julienne';
+import type { Site } from '@julienne/static';
 import { extname, join as pathJoin, resolve as resolvePath } from 'path';
 import sharp from 'sharp';
 import type { Plugin } from 'unified';
@@ -29,7 +29,7 @@ type Options = {
   outputDirectory?: string;
   sizes?: number[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  store?: Store<any>;
+  site?: Site<string>;
 };
 
 /**
@@ -45,10 +45,10 @@ export const processImages: Plugin = ({
   contentDirectory,
   outputDirectory = '/static/images',
   sizes = [1920, 1280, 640, 320],
-  store,
+  site,
 }: Options | undefined = {}) => {
-  if (store === undefined) {
-    throw new TypeError('options.store is required.');
+  if (site === undefined) {
+    throw new TypeError('options.site is required.');
   }
 
   if (contentDirectory === undefined) {
@@ -152,7 +152,7 @@ export const processImages: Plugin = ({
         });
 
         images.forEach(({ width, url }) => {
-          store!.createFile(url, () => {
+          site!.createFile(url, () => {
             let transformer = sharp().resize(width);
             return createReadStream(imagePath).pipe(transformer);
           });

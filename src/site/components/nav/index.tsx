@@ -6,8 +6,8 @@ import { Link } from '../link';
 import { Box, Heading, Text } from '../../ds';
 
 const navItemMargin = {
-  right: ['none', 'medium'],
-  left: ['medium', 'none'],
+  right: { sm: 'none', md: 'medium' },
+  left: { sm: 'medium', md: 'none' },
 } as const;
 
 const NavList: FC<{ items: { text: string; href: string }[] }> = ({
@@ -44,7 +44,7 @@ const Nav: FC<{ siteTitle: string; showSearch: boolean }> = ({
   return (
     <Box
       as="nav"
-      display={showSearch ? ['block', 'flex'] : 'block'}
+      display={showSearch ? { sm: 'block', md: 'flex' } : 'block'}
       alignItems="center"
       justifyContent="spaceBetween"
       flexWrap="wrap"
@@ -52,7 +52,7 @@ const Nav: FC<{ siteTitle: string; showSearch: boolean }> = ({
       backgroundColor="purple"
     >
       <Box
-        mb={showSearch ? ['medium', 'none'] : undefined}
+        mb={showSearch ? { sm: 'medium', md: 'none' } : undefined}
         display="flex"
         alignItems="baseline"
         justifyContent="spaceBetween"
@@ -63,7 +63,7 @@ const Nav: FC<{ siteTitle: string; showSearch: boolean }> = ({
               color="white"
               level="1"
               fontFamily="header"
-              size={['small', 'medium']}
+              size={{ sm: 'small', md: 'medium' }}
               weight="bold"
             >
               {siteTitle}

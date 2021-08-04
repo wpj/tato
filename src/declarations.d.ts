@@ -4,6 +4,10 @@ declare module '*.module.css' {
   export default content;
 }
 
+declare module 'react-dom/server.js' {
+  export * from 'react-dom/server'
+}
+
 declare module 'hast-util-select' {
   import type { Element, Node } from 'hast';
 
@@ -16,4 +20,6 @@ declare module 'hast-util-select' {
 
 declare module 'lqip';
 
-declare module 'treat/webpack-plugin';
+declare module 'remark-retext';
+
+declare module 'retext-stringify';
