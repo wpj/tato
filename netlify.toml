@@ -1,6 +1,0 @@
-[build]
-  command = "yarn workspace demo build"
-  publish = "packages/demo/public"
-
-[[plugins]]
-  package = "netlify-plugin-gatsby-cache"

@@ -1,33 +1,24 @@
-# gatsby-theme-tato
-
-Gatsby theme for authoring, editing, and viewing markdown recipes with
-[netlify-cms](https://www.netlifycms.org/).
-
-**WARNING**: This project is in very early stages; breaking changes may be
-introduced in the future.
+# tato
 
 ## Install
 
-`yarn add gatsby-theme-tato`
+`npm install @wpj/tato`
 
-## How to use
+## Usage
 
-Add the plugin to your `gatsy-config.js`:
+Example usage:
 
-```javascript
-plugins: [`gatsby-theme-tato`];
+```sh
+npx --package @wpj/tato tato build --dir /path/to/markdown
 ```
 
-## Options
+### build
 
-- `contentPath`: (default: `"recipes"`) path to a directory of markdown files.
-  This path must be relative to the root of your Gatsby site. When you first
-  start or build your Gatsby site, if this directory doesn't exist on the file
-  system, this theme will create the directory and place an example recipe
-  inside.
+```sh
+Usage
+  $ tato build [options]
 
-- `icon`: (default: `"assets/icon.jpg"`) path to an image to use as the site's
-  icon. When you first start or build your Gatsby site, if the path doesn't
-  exist on the file system, this theme will write its default icon to that path.
-
-- `name`: (default: `"Tato"`) name to use as the site's title.
+Options
+  -d, --dir     Directory containing markdown files to render
+  -h, --help    Displays this message
+```
