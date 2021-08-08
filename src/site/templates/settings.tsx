@@ -80,27 +80,18 @@ function ForceRefresh() {
   );
 }
 
-function SiteInfo({
-  commit,
-  themeVersion,
-}: {
-  commit: string;
-  themeVersion: string;
-}) {
+function SiteInfo({ version }: { version: string }) {
   return (
     <Card title="Site Info">
-      <Text as="p">Commit: {commit}</Text>
-
-      <Text as="p">Theme version: {themeVersion}</Text>
+      <Text as="p">Version: {version}</Text>
     </Card>
   );
 }
 
 const SettingsPage: FC<{
-  commit: string;
   siteTitle: string;
-  themeVersion: string;
-}> = ({ commit, siteTitle, themeVersion }) => {
+  version: string;
+}> = ({ siteTitle, version }) => {
   const pageTitle = `${siteTitle} | Settings`;
 
   return (
@@ -109,7 +100,7 @@ const SettingsPage: FC<{
         <Heading level="1">Settings</Heading>
       </Box>
       <Stack space="medium">
-        <SiteInfo commit={commit} themeVersion={themeVersion} />
+        <SiteInfo version={version} />
         <ForceRefresh />
       </Stack>
     </MainLayout>

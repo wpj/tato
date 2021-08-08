@@ -20,6 +20,10 @@ import { createJsonSlug } from './shared/helpers';
 import type { IndexData } from './site/components/search/types';
 import { render } from './ssr';
 
+async function getPackageInfo() {
+  return JSON.parse(await readFile(resolve('../package.json'), 'utf8'));
+}
+
 let resolve = createResolve(import.meta.url);
 
 let output = {
@@ -267,6 +271,18 @@ export async function getSite(dir: string): Promise<Site<Template>> {
       ...sharedProps,
     },
   }));
+
+  createPageAndPageJson('/settings/', async () => {
+    const { version } = await getPackageInfo();
+
+    return {
+      template: 'settings',
+      props: {
+        version,
+        ...sharedProps,
+      },
+    };
+  });
 
   return site;
 }
