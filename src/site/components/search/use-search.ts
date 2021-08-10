@@ -36,7 +36,10 @@ function useQuery<Data>(fetcher: () => Promise<Data>) {
   return queryState;
 }
 
-export function useSearch(searchIndex: Index | null, query: string) {
+export function useSearch(
+  searchIndex: Index | null,
+  query: string | undefined,
+) {
   let fetchSearchResults = useCallback(() => {
     return query && searchIndex
       ? searchIndex.search(query)

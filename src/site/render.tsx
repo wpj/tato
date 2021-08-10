@@ -1,70 +1,62 @@
 import React, { ComponentType, useEffect, useState } from 'react';
 import { hydrate } from 'react-dom';
 import 'typeface-work-sans';
-import { Provider as RoutingProvider } from './routing';
-
-function createJsonSlug(pageSlug: string) {
-  let slug;
-  if (pageSlug.endsWith('.html')) {
-    slug = pageSlug.replace('.html', '.json');
-  } else if (pageSlug.endsWith('/')) {
-    slug = `${pageSlug}index.json`;
-  } else {
-    slug = `${pageSlug}/index.json`;
-  }
-
-  return slug;
-}
+import { getPage } from '../shared/page';
+import { Location, Provider as RoutingProvider } from './routing';
 
 function isInternalURL(url: string) {
   return new RegExp(`^${location.origin}`).test(url);
 }
 
-type Page = {
-  template: string;
-  props: any;
-};
-
-async function fetchPageJson(pageUrl: string): Promise<Page | null> {
-  let jsonUrl = createJsonSlug(pageUrl);
-
-  let resp = await fetch(jsonUrl);
-
-  if (!resp.ok) {
-    return null;
-  }
-
-  return resp.json();
-}
-
-function App({ template, ...initialProps }: { template: ComponentType }) {
-  let [{ template: Template, props }, setState] = useState({
-    template,
+function App({
+  component,
+  initialProps,
+}: {
+  component: ComponentType;
+  initialProps: Record<string, unknown>;
+}) {
+  let [{ component: Component, props }, setPage] = useState({
+    component,
     props: initialProps,
+  });
+
+  let [location, setLocation] = useState<Location>({
+    pathname: '',
+    search: '',
   });
 
   async function setTemplate(url: string) {
     let pageUrl = url.split('?')[0];
-    let page = await fetchPageJson(pageUrl);
+    let page = await getPage(pageUrl);
 
     // If the requested page does not have associated JSON data, trigger a full
     // page load for the requested page URL.
     if (page === null) {
-      location.href = url;
+      window.location.href = url;
       return;
     }
 
-    let Template = await import(`./templates/${page.template}.tsx`).then(
-      (mod) => mod.default,
-    );
-
-    setState({ props: page.props, template: Template });
+    setPage(page);
   }
 
+  useEffect(() => {
+    setLocation(window.location);
+  }, []);
+
+  useEffect(() => {
+    if (location.pathname) {
+      setTemplate(location.pathname);
+    }
+  }, [location]);
+
   async function navigate(url: string) {
-    await setTemplate(url);
+    let [pathname, search] = url.split('?');
 
     history.pushState(null, '', url);
+    setLocation({
+      pathname,
+      search,
+    });
   }
 
   useEffect(() => {
@@ -88,7 +80,10 @@ function App({ template, ...initialProps }: { template: ComponentType }) {
     document.addEventListener('click', handleClick, false);
 
     function handlePopState() {
-      setTemplate(location.href);
+      setLocation({
+        pathname: window.location.pathname,
+        search: window.location.search,
+      });
     }
 
     window.addEventListener('popstate', handlePopState);
@@ -100,8 +95,8 @@ function App({ template, ...initialProps }: { template: ComponentType }) {
   }, []);
 
   return (
-    <RoutingProvider value={{ navigate, setTemplate }}>
-      <Template {...props} />
+    <RoutingProvider value={{ location, navigate, setTemplate }}>
+      <Component {...props} />
     </RoutingProvider>
   );
 }
@@ -115,5 +110,5 @@ export default function render({
   props: Record<string, unknown>;
   target: HTMLElement;
 }): void {
-  hydrate(<App template={component} {...props} />, target);
+  hydrate(<App component={component} initialProps={props} />, target);
 }

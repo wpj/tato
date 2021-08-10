@@ -1,4 +1,3 @@
-import { parse as parseQueryString } from 'query-string';
 import React, { useEffect, useMemo, useState } from 'react';
 import MainLayout from '../components/layouts/main';
 import SearchForm from '../components/search/form';
@@ -6,6 +5,7 @@ import Search from '../components/search/search';
 import { Index } from '../components/search/search-index';
 import { IndexData } from '../components/search/types';
 import { Box } from '../ds';
+import { useLocation } from '../routing';
 
 const SearchPage = ({
   searchIndexPath,
@@ -14,15 +14,19 @@ const SearchPage = ({
   searchIndexPath: string;
   siteTitle: string;
 }) => {
-  let [query, setQuery] = useState('');
+  let location = useLocation();
+  let [query, setQuery] = useState<string | undefined>('');
 
   let pageTitle = `${siteTitle} | Search Results`;
 
   let [searchIndexData, setSearchIndexData] = useState<IndexData | null>(null);
 
   useEffect(() => {
-    setQuery(parseQueryString(location.search).q as string);
-  }, []);
+    let searchParams = new URLSearchParams(location.search);
+    let query = searchParams.get('q') ?? undefined;
+
+    setQuery(query);
+  }, [location]);
 
   useEffect(() => {
     async function run() {

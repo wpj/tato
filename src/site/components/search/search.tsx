@@ -5,7 +5,7 @@ import Results from './results';
 import { Index } from './search-index';
 
 interface Props {
-  query: string;
+  query: string | undefined;
   searchIndex: Index | null;
 }
 
