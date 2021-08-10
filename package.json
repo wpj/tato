@@ -2,7 +2,7 @@
   "name": "@wpj/tato",
   "description": "Static site generator for an offline recipe browsing app",
   "type": "module",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "license": "MIT",
   "bin": {
     "tato": "./dist/tato.js"
