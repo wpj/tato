@@ -1,7 +1,7 @@
 import { Site } from '@julienne/static';
 import { readFile } from 'fs/promises';
 import { load } from 'js-yaml';
-import { UserConfig } from 'julienne';
+import { defaultRenderDocument, RenderDocument, UserConfig } from 'julienne';
 import type { Root } from 'mdast';
 import { paramCase } from 'param-case';
 import { dirname, resolve as resolvePath, sep as pathSeparator } from 'path';
@@ -37,26 +37,47 @@ const templates = {
   recipes: resolve('./site/templates/recipes.tsx'),
   search: resolve('./site/templates/search.tsx'),
   settings: resolve('./site/templates/settings.tsx'),
+  shell: resolve('./site/shell.tsx'),
   tag: resolve('./site/templates/tag.tsx'),
   tags: resolve('./site/templates/tags.tsx'),
 };
 
 export type Template = keyof typeof templates;
 
-export let config: UserConfig<ComponentType, Template> = {
-  // experimental: {
-  //   partialHydration: {
-  //     flags: ['export const hydrate = true;'],
-  //     wrap: resolve('./wrap.ts'),
-  //   },
-  // },
-  output,
-  render: {
-    client: resolve('./site/render.tsx'),
-    server: render,
-  },
-  templates,
+const renderDocument: RenderDocument = ({ scripts = [], ...props }) => {
+  let registerSwScript = {
+    type: 'application/javascript',
+    content: 'if ("serviceWorker" in navigator) { navigator.serviceWorker.register("/sw.js") }',
+  };
+
+  return defaultRenderDocument({
+    scripts: scripts.concat(registerSwScript),
+    ...props,
+  });
 };
+
+export function createConfig({ serviceWorker }: { serviceWorker: boolean }) {
+  let config: UserConfig<ComponentType, Template> = {
+    // experimental: {
+    //   partialHydration: {
+    //     flags: ['export const hydrate = true;'],
+    //     wrap: resolve('./wrap.ts'),
+    //   },
+    // },
+    output,
+    render: {
+      client: resolve('./site/render.tsx'),
+      server: render,
+    },
+    templates,
+  };
+
+  if (serviceWorker) {
+    config.render.document = renderDocument;
+  }
+
+  return config;
+}
 
 let sharedProps = {
   siteTitle: 'Tato',
@@ -283,6 +304,14 @@ export async function getSite(dir: string): Promise<Site<Template>> {
       },
     };
   });
+
+  site.createPage('/__shell.html', () => ({
+    template: 'shell',
+    props: {
+      title: 'Tato',
+      ...sharedProps,
+    },
+  }));
 
   return site;
 }

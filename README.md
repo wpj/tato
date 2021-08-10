@@ -19,6 +19,7 @@ Usage
   $ tato build [options]
 
 Options
-  -d, --dir     Directory containing markdown files to render
-  -h, --help    Displays this message
+  -d, --dir           Directory containing markdown files to render
+  --service-worker    Generate a service worker to enable offline access  (default false)
+  -h, --help          Displays this message
 ```

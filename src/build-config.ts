@@ -1,11 +1,13 @@
 import type { UserConfig } from 'vite';
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
 import reactRefresh from '@vitejs/plugin-react-refresh';
-import { config } from './config';
+import { createConfig } from './config';
 
 let viteConfig: UserConfig = {
   plugins: [vanillaExtractPlugin(), reactRefresh()],
 };
+
+let config = createConfig({ serviceWorker: false });
 
 let buildConfig = {
   ...config,
@@ -15,4 +17,4 @@ let buildConfig = {
   },
 };
 
-export { buildConfig as config }
+export { buildConfig as config };
