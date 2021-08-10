@@ -2,7 +2,7 @@
   "name": "@wpj/tato",
   "description": "Julienne app for browsing recipes",
   "type": "module",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "license": "MIT",
   "bin": {
     "tato": "./dist/site.js"
