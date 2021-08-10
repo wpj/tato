@@ -14,7 +14,7 @@ export async function copyDirectory(from: string, to: string) {
 
   await Promise.all(
     paths.map(async (fromPath) => {
-      let toPath = fromPath.replace(new RegExp(`^${from}`), to);
+      let toPath = fromPath.replace(from, to);
 
       await mkdir(path.dirname(toPath), { recursive: true });
       await copyFile(fromPath, toPath);
