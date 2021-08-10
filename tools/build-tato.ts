@@ -26,7 +26,7 @@ async function buildApp() {
 
 let staticConfig = {
   input: resolve('../src/static'),
-  output: resolve('../dist/static'),
+  output: resolve('../dist/public'),
 };
 
 async function copyStatic() {

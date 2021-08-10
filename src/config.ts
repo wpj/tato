@@ -12,7 +12,6 @@ import remarkParse from 'remark-parse';
 import remarkToRehype from 'remark-rehype';
 import { totalist } from 'totalist';
 import unified from 'unified';
-import { copyDirectory } from './build/copy-directory';
 import { hash } from './build/hash';
 import { processImages } from './build/process-images';
 import { createResolve } from './module';
@@ -47,7 +46,8 @@ export type Template = keyof typeof templates;
 const renderDocument: RenderDocument = ({ scripts = [], ...props }) => {
   let registerSwScript = {
     type: 'application/javascript',
-    content: 'if ("serviceWorker" in navigator) { navigator.serviceWorker.register("/sw.js") }',
+    content:
+      'if ("serviceWorker" in navigator) { navigator.serviceWorker.register("/sw.js") }',
   };
 
   return defaultRenderDocument({
@@ -179,8 +179,6 @@ export async function getSite(dir: string): Promise<Site<Template>> {
       JSON.stringify(await getPage()),
     );
   }
-
-  await copyDirectory(site, resolve('./static'), '/');
 
   let recipePaths: string[] = [];
 

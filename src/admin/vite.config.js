@@ -7,7 +7,7 @@ let cwd = process.cwd();
 export default {
   base: '/admin/',
   build: {
-    outDir: joinPath(cwd, 'dist/static/admin'),
+    outDir: joinPath(cwd, 'dist/public/admin'),
   },
   root: joinPath(cwd, 'src/admin'),
 };
