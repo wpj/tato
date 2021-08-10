@@ -5,7 +5,7 @@
   "version": "0.0.1",
   "license": "MIT",
   "bin": {
-    "tato": "./dist/site.js"
+    "tato": "./dist/tato.js"
   },
   "author": "Wyatt Johnston <w@wyatt.page>",
   "homepage": "https://github.com/wpj/tato#readme",
