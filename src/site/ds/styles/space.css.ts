@@ -1,11 +1,11 @@
-import { styleVariants, style } from '@vanilla-extract/css';
+import { style } from '@vanilla-extract/css';
 import { mapValues } from 'lodash';
+import { breakpoints } from '../../ds/theme/constants';
+import { vars } from '../../ds/theme/theme.css';
 import {
   createResponsiveSpaceRuleForAdjacentSiblings,
   wrapWithMediaQuery,
 } from './helpers';
-import { vars } from '../../ds/theme/theme.css';
-import { breakpoints } from '../../ds/theme/constants';
 
 function createSpaceStyles(property: string) {
   return mapValues(vars.space, (space) => {
