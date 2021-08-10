@@ -1,5 +1,7 @@
 # tato
 
+Static site generator for an offline recipe browsing app.
+
 ## Install
 
 `npm install @wpj/tato`

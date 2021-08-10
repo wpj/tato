@@ -1,6 +1,6 @@
 {
   "name": "@wpj/tato",
-  "description": "Julienne app for browsing recipes",
+  "description": "Static site generator for an offline recipe browsing app",
   "type": "module",
   "version": "0.0.0",
   "license": "MIT",
