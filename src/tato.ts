@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { write } from '@julienne/static';
 import { createRenderer } from 'julienne';
 import { join as pathJoin, resolve as resolvePath } from 'path';
