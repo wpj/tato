@@ -241,6 +241,7 @@ export async function getSite(dir: string): Promise<Site<Template>> {
       props: {
         ...tag,
         recipes: tag.recipes,
+        ...sharedProps,
       },
     }));
   });
