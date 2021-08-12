@@ -1,7 +1,6 @@
-import { createReadStream } from 'fs';
-import hasha from 'hasha';
-import type { Element, Node } from 'hast';
 import type { Site } from '@julienne/static';
+import { createReadStream } from 'fs';
+import type { Element, Node } from 'hast';
 import { extname, join as pathJoin, resolve as resolvePath } from 'path';
 import sharp from 'sharp';
 import type { Plugin } from 'unified';
@@ -9,6 +8,7 @@ import h from 'unist-builder';
 import visit from 'unist-util-visit';
 import { generatePlaceholder } from './placeholder-image';
 import { imageSize } from './utils';
+import { fromFile as hashFromFile } from './hash';
 
 function createSrcset(images: { width: number; url: string }[]) {
   return images.map(({ width, url }) => `${url} ${width}w`).join(', ');
@@ -92,7 +92,7 @@ export const processImages: Plugin = ({
           contentDirectory!,
           image.properties!.src as string,
         );
-        let hash = await hasha.fromFile(imagePath);
+        let hash = await hashFromFile(imagePath);
         let extension = extname(imagePath);
 
         let dimensions = await imageSize(imagePath);
