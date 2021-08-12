@@ -30,10 +30,10 @@ export async function build({ dir }: { dir: string }) {
     globIgnores: ['**/*.map', '**/!(__shell)/*.html', 'admin/**'],
     manifestTransforms: [removeNonShellHtml],
     navigateFallback: '/__shell.html',
+    navigateFallbackDenylist: [/^\/admin/],
     skipWaiting: true,
     swDest: joinPath(dir, 'sw.js'),
   };
 
-  // workbox-build resolves paths against the current working directory.
   await generateSW(options);
 }
