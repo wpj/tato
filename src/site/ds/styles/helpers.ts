@@ -1,11 +1,16 @@
-import { globalStyle, StyleRule, styleVariants } from '@vanilla-extract/css';
+import { globalStyle, style, StyleRule } from '@vanilla-extract/css';
 import type { Properties } from 'csstype';
 import { mapValues } from 'lodash';
-import { vars } from '../../ds/theme/theme.css';
 import { breakpoints } from '../../ds/theme/constants';
+import { vars } from '../../ds/theme/theme.css';
 
-export function wrapWithMediaQuery(style: StyleRule, minWidth: string) {
-  if (minWidth === '0') {
+type Breakpoints = typeof breakpoints;
+
+export function wrapWithMediaQuery(
+  style: StyleRule,
+  minWidth: Breakpoints[keyof Breakpoints],
+) {
+  if (minWidth === '0rem') {
     return style;
   }
 
@@ -23,42 +28,13 @@ export function mapToResponsiveStyleProperty<
   Value extends string | number,
 >(map: Record<Key, Value>, property: keyof Properties) {
   return mapValues(map, (displayRule) => {
-    return styleVariants(breakpoints, (minWidth) => {
+    return mapValues(breakpoints, (minWidth) => {
       let rule = { [property]: displayRule };
 
-      return wrapWithMediaQuery(rule, minWidth);
+      return style(wrapWithMediaQuery(rule, minWidth));
     });
   });
 }
-
-// Creates a rule-less class and creates a global rule that styles its adjacent
-// child siblings.
-// export function createResponsiveSpaceRuleForAdjacentSiblings(
-//   property: string,
-//   decorator?: (rule: {
-//     [key: string]: string | number;
-//   }) => { [key: string]: string | number },
-// ) {
-//   return mapValues(breakpoints, (space) => {
-//     let variants = styleVariants(vars.space, () => ({}));
-
-//     Object.entries(variants).forEach(([minWidth, cls]) => {
-//       let globalRule = {
-//         [property]: space,
-//       };
-
-//       globalStyle(
-//         `${cls} > * + *`,
-//         wrapWithMediaQuery(
-//           decorator ? decorator(globalRule) : globalRule,
-//           minWidth,
-//         ),
-//       );
-//     });
-
-//     return variants;
-//   });
-// }
 
 export function createResponsiveSpaceRuleForAdjacentSiblings(
   property: string,
@@ -67,19 +43,20 @@ export function createResponsiveSpaceRuleForAdjacentSiblings(
   },
 ) {
   return mapValues(vars.space, (space) => {
-    let variants = styleVariants(breakpoints, () => ({}));
+    let variants = mapValues(breakpoints, () => style({}));
 
-    Object.entries(variants).forEach(([minWidth, cls]) => {
+    Object.entries(breakpoints).forEach(([size, minWidth]) => {
+      let className = variants[size as keyof typeof variants];
+
       let globalRule = {
         [property]: space,
       };
 
+      let decoratedRule = decorator ? decorator(globalRule) : globalRule;
+
       globalStyle(
-        `${cls} > * + *`,
-        wrapWithMediaQuery(
-          decorator ? decorator(globalRule) : globalRule,
-          minWidth,
-        ),
+        `${className} > * + *`,
+        wrapWithMediaQuery(decoratedRule, minWidth),
       );
     });
 

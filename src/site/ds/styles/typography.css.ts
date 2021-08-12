@@ -1,7 +1,7 @@
 import { styleVariants } from '@vanilla-extract/css';
 import { mapValues } from 'lodash';
-import { vars } from '../../ds/theme/theme.css';
 import { breakpoints } from '../../ds/theme/constants';
+import { vars } from '../../ds/theme/theme.css';
 import { wrapWithMediaQuery } from './helpers';
 
 export const fontSize = mapValues(vars.fontSize, (fontSize) => {

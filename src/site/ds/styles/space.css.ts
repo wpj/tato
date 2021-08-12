@@ -15,15 +15,6 @@ function createSpaceStyles(property: string) {
       return style(wrapWithMediaQuery(rule, minWidth));
     });
   });
-  // return styleTree((theme, styleNode) => {
-  //   return mapValues(theme.space, (space) => {
-  //     return theme.breakpoints.map((minWidth: string | number) => {
-  //       let rule = { [property]: space };
-
-  //       return styleNode(wrapWithMediaQuery(rule, minWidth));
-  //     });
-  //   });
-  // });
 }
 
 export const padding = {
@@ -32,18 +23,6 @@ export const padding = {
   left: createSpaceStyles('paddingLeft'),
   right: createSpaceStyles('paddingRight'),
 };
-
-// function createSpaceStyles(property: string) {
-//   return mapValues(vars.space, (space) => {
-//     return styleVariants(breakpoints, (minWidth) => {
-//       let rule = { [property]: space };
-
-//       let result =  wrapWithMediaQuery(rule, minWidth);
-
-//       return result;
-//     });
-//   });
-// }
 
 export const margin = {
   top: createSpaceStyles('marginTop'),
