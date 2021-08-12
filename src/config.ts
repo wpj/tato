@@ -43,14 +43,38 @@ const templates = {
 
 export type Template = keyof typeof templates;
 
-const renderDocument: RenderDocument = ({ scripts = [], ...props }) => {
+const renderDocument: RenderDocument = ({
+  links = [],
+  scripts = [],
+  ...props
+}) => {
   let registerSwScript = {
     type: 'application/javascript',
     content:
       'if ("serviceWorker" in navigator) { navigator.serviceWorker.register("/sw.js") }',
   };
 
+  let additionalLinks = [
+    {
+      rel: 'icon',
+      type: 'image/png',
+      sizes: '32x32',
+      href: '/images/icon-32.png',
+    },
+    {
+      rel: 'icon',
+      type: 'image/png',
+      sizes: '16x16',
+      href: '/images/icon-16.png',
+    },
+    {
+      rel: 'manifest',
+      href: '/manifest.json',
+    },
+  ];
+
   return defaultRenderDocument({
+    links: links.concat(additionalLinks),
     scripts: scripts.concat(registerSwScript),
     ...props,
   });
