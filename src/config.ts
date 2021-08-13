@@ -32,6 +32,7 @@ let output = {
 
 const templates = {
   index: resolve('./site/templates/index.tsx'),
+  notFound: resolve('./site/templates/404.tsx'),
   recipe: resolve('./site/templates/recipe.tsx'),
   recipes: resolve('./site/templates/recipes.tsx'),
   search: resolve('./site/templates/search.tsx'),
@@ -330,6 +331,14 @@ export async function getSite(dir: string): Promise<Site<Template>> {
 
   site.createPage('/__shell.html', () => ({
     template: 'shell',
+    props: {
+      title: 'Tato',
+      ...sharedProps,
+    },
+  }));
+
+  site.createPage('/404.html', () => ({
+    template: 'notFound',
     props: {
       title: 'Tato',
       ...sharedProps,

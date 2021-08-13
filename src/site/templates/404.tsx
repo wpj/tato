@@ -11,7 +11,7 @@ const NotFoundPage = ({ siteTitle }: Props) => {
   return (
     <Layout siteTitle={siteTitle} pageTitle={pageTitle}>
       <h1>Not Found</h1>
-      <p>You just hit a route that doesn&#39;t exist... the sadness.</p>
+      <p>The page you requested was not found.</p>
     </Layout>
   );
 };
