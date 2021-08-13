@@ -1,6 +1,8 @@
 import type { ComponentType } from 'react';
 import { createJsonSlug } from './helpers';
 
+export class ErrorPageNotFound extends Error {}
+
 export type Page = {
   template: string;
   props: Record<string, unknown>;
@@ -24,7 +26,7 @@ export async function getPage(
   let page = await fetchPageJson(pageUrl);
 
   if (!page) {
-    throw new Error('Could not find page');
+    throw new ErrorPageNotFound();
   }
 
   let { template, props } = page;
