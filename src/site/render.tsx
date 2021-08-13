@@ -75,6 +75,7 @@ function App({
     document.addEventListener('click', handleClick, false);
 
     function handlePopState() {
+      setTemplate(window.location.pathname);
       setLocation({
         pathname: window.location.pathname,
         search: window.location.search,
