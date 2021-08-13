@@ -43,16 +43,11 @@ function App({
     setLocation(window.location);
   }, []);
 
-  useEffect(() => {
-    if (location.pathname) {
-      setTemplate(location.pathname);
-    }
-  }, [location]);
-
   async function navigate(url: string) {
     let [pathname, search] = url.split('?');
 
     history.pushState(null, '', url);
+    setTemplate(pathname);
     setLocation({
       pathname,
       search,
